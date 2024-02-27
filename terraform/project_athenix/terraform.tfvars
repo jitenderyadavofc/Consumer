@@ -4,7 +4,7 @@ layers = ["bronze", "silver", "gold", "config"]
 
 ########## TAGS ########
 custom_tags = {
-  "Environment"     = "prod5"
+  "Environment"     = "prod"
   "ApplicationName" = "Athenix-app"
   "ApplicationId"   = "101"
 }
