@@ -1,14 +1,26 @@
 
-output "aws_s3_bucket_id_output" {
-  value = {
-    for bucket_key, bucket_value in module.aws_s3_mod.s3_buckets :
-    bucket_key => bucket_value.id
-  }
-
-}
-
-
 output "aws_s3_bucket_keys_output" {
-  value = values(module.aws_s3_mod.s3_buckets)
+  value = module.aws_s3_mod
 
 }
+
+# locals {
+#   bucket={for k, v in module.aws_s3_mod:
+#              k=>{ for i in flatten(values(v) ) :
+#                    k=>i}
+
+#   }
+# }
+
+locals {
+  bucket = { for k, v in module.aws_s3_mod :
+    k => flatten(values(v))
+
+  }
+}
+
+output "local_output" {
+  value = local.bucket
+
+}
+
