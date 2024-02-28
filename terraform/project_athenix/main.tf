@@ -19,7 +19,7 @@ module "aws_iam_role_mod" {
   # providers = {
   #   aws.account_prod = aws.account_prod
   # }
-  source     = "github.com/jitenderyadavofc/Library/terraform/modules/iam"
+  source     = "github.com/jitenderyadavofc/Library/terraform/modules/iam/iam-role"
 
   for_each            = { for roles in var.iam_roles : roles.name => roles }
   role_name           = each.value.name
@@ -37,7 +37,7 @@ module "aws_iam_policy_mod" {
   # providers = {
   #   aws.account_prod = aws.account_prod
   # }
-  source     = "github.com/jitenderyadavofc/Library/terraform/modules/iam-policies"
+  source     = "github.com/jitenderyadavofc/Library/terraform/modules/iam/iam-policies"
 
   for_each         = { for name, policy in var.iam_policies : name => policy }
   policy_name      = each.value.name
