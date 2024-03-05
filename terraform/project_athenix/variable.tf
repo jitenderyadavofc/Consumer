@@ -24,11 +24,11 @@ variable "custom_tags" {
 }
 
 variable "iam_roles" {
-
+  description = "iam roles"
 }
 
 variable "iam_policies" {
-
+  description = "Iam policies"
 }
 
 
@@ -49,47 +49,6 @@ variable "layers" {
     "config"
   ]
 }
-
-variable "catalog_db_name" {
-  description = "Aws glue catalog db name"
-  type        = string
-
-}
-
-variable "data_location" {
-  description = "datasource location"
-  type        = string
-
-}
-
-variable "crawler_name" {
-  description = "Aws glue crawler name"
-  type        = string
-
-}
-
-# variable "glue_role_arn" {
-#   description = "Aws glue role arn"
-#   type        = string
-
-# }
-
-variable "glue_job_name" {
-  description = "Aws glue job name"
-  type        = string
-
-}
-
-variable "max_capacity" {
-  description = "Aws glue job max capacity  DPU"
-  type        = number
-
-}
-
-variable "command_name" {
-   description = "Aws glue job command"
-}
-
 
 # RDS Modules variable
 variable "cluster_identifier" {
@@ -132,13 +91,7 @@ variable "skip_final_snapshot" {
   type        = bool
 }
 
-variable "job_script_location" {
-  description = "Aws glue job script location"
-  type        = string
-}
-
-
-variable "rds_cluster_instances"{
+variable "rds_cluster_instances" {
   description = "Aws rds cluster instances"
 }
 
@@ -149,16 +102,33 @@ variable "subnet_ids" {
 
 variable "max_scale_capacity" {
   description = "Aws rds maximum scale capacity"
-  type = number
+  type        = number
 }
 
 variable "min_scale_capacity" {
   description = "Aws rds minimum scale capacity"
-  type = number
+  type        = number
 }
 
-variable "deletion_protection" {  
+variable "deletion_protection" {
   description = "Aws rds delete protection "
-  type = bool
-  
+  type        = bool
+
+}
+
+variable "lf_permissions" {
+  description = "Lake formation permissions"
+
+}
+
+variable "glue_crawler_details" {
+  description = "glue crawler details"
+}
+
+variable "glue_job_details" {
+  description = "glue jobs details"
+}
+
+variable "lf_register" {
+  description = "lake formation register location"
 }

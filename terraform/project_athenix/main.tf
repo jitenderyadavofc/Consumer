@@ -53,19 +53,15 @@ module "aws_iam_policy_mod" {
 ## GLUE DB Module  ###
 
 
-module "glue_catalog_database_db" {
+module "glue_crawler_mod" {
 
-  source     = "github.com/jitenderyadavofc/Library/terraform/modules/glue"
+  source   = "github.com/jitenderyadavofc/Library/terraform/modules/glue/glue-crawler"
+  for_each = { for details in var.glue_crawler_details : details.catalog_db_name => details if length(var.glue_crawler_details) > 0 }
 
-  catalog_db_name = var.catalog_db_name
-  data_location   = var.data_location
-  crawler_name    = var.crawler_name
+  catalog_db_name = each.value.catalog_db_name
+  data_location   = each.value.data_location
+  crawler_name    = each.value.crawler_name
   glue_role_arn   = local.glue_arn[0]
-
-  glue_job_name       = var.glue_job_name
-  job_script_location = var.job_script_location
-  max_capacity        = var.max_capacity
-  command_name        = var.command_name
 
 
   tags = var.custom_tags
@@ -73,6 +69,55 @@ module "glue_catalog_database_db" {
   depends_on = [module.aws_iam_role_mod]
 }
 
+module "glue_jobs_mod" {
+
+  source   = "github.com/jitenderyadavofc/Library/terraform/modules/glue/glue-jobs"
+  for_each = { for jobs in var.glue_job_details : jobs.glue_job_name => jobs if length(var.glue_job_details) > 0 }
+
+  glue_role_arn = local.glue_arn[0]
+
+  glue_job_name       = each.value.glue_job_name
+  job_script_location = each.value.job_script_location
+  max_capacity        = each.value.max_capacity
+  command_name        = each.value.command_name
+  glue_version        = each.value.glue_version
+
+  tags = var.custom_tags
+
+  depends_on = [module.aws_iam_role_mod, module.glue_crawler_mod]
+}
+
+
+# AWS LakeFormation Module
+
+module "aws_lake_formation_register" {
+  source          = "github.com/jitenderyadavofc/Library/terraform/modules/lake-formation/lf-register-location"
+  bucket_register = var.lf_register.bucket_arn
+}
+
+
+module "aws_lake_formation_permission" {
+  source = "github.com/jitenderyadavofc/Library/terraform/modules/lake-formation/lf-permissions"
+
+  for_each = { for idx, details in var.lf_permissions : idx => details if length(var.lf_permissions) > 0 }
+
+  lake_permissions = each.value.lake_permissions
+  principle_arn    = local.glue_arn[0]
+  db_name          = each.value.db_name
+
+  depends_on = [module.glue_crawler_mod, module.aws_lake_formation_register]
+}
+
+
+
+
+
+
+# AppFlow Module
+
+# module "aws_appflow_mod" {
+#   source = "./modules/appflow"
+# }
 
 # RDS Module
 
