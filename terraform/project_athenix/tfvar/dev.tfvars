@@ -102,6 +102,7 @@ rds_cluster_instances = [
     publicly_accessible = false
   }
 ]
+<<<<<<< HEAD:terraform/project_athenix/terraform.tfvars
 
 
 #Lake Formation
@@ -115,3 +116,5 @@ lf_permissions = [{
   db_name          = "ingest"
 }]
 
+=======
+>>>>>>> ad09bc87b651aaa10ec0fed15048d58853036fd2:terraform/project_athenix/tfvar/dev.tfvars
